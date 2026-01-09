@@ -4,6 +4,8 @@ import { z } from "zod";
 
 // === TABLE DEFINITIONS ===
 
+export * from "./models/auth";
+
 export const assets = pgTable("assets", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -26,6 +28,10 @@ export const assets = pgTable("assets", {
   // Details
   story: text("story"),
   royaltySource: text("royalty_source"), // For music
+  
+  // Admin simulation fields
+  lastPayoutAmount: numeric("last_payout_amount"),
+  valuationChange: numeric("valuation_change"), // percentage
   
   isFeatured: boolean("is_featured").default(false),
   createdAt: timestamp("created_at").defaultNow(),

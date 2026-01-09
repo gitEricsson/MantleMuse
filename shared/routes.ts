@@ -95,6 +95,34 @@ export const api = {
       },
     },
   },
+  admin: {
+    createAsset: {
+      method: 'POST' as const,
+      path: '/api/admin/assets',
+      input: insertAssetSchema,
+      responses: {
+        201: z.custom<typeof assets.$inferSelect>(),
+        401: errorSchemas.internal,
+      },
+    },
+    updateAsset: {
+      method: 'PATCH' as const,
+      path: '/api/admin/assets/:id',
+      input: insertAssetSchema.partial(),
+      responses: {
+        200: z.custom<typeof assets.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
+    distributePayout: {
+      method: 'POST' as const,
+      path: '/api/admin/assets/:id/payout',
+      input: z.object({ amount: z.number() }),
+      responses: {
+        200: z.object({ success: z.boolean() }),
+      },
+    },
+  },
 };
 
 // ============================================

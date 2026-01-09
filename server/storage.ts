@@ -55,6 +55,14 @@ export class DatabaseStorage implements IStorage {
     return newAsset;
   }
 
+  async updateAsset(id: number, updates: Partial<InsertAsset>): Promise<Asset> {
+    const [updated] = await db.update(assets)
+      .set(updates)
+      .where(eq(assets.id, id))
+      .returning();
+    return updated;
+  }
+
   async getUserByWallet(walletAddress: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.walletAddress, walletAddress));
     return user;
