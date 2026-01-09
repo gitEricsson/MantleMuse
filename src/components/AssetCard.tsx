@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { type Asset } from "@shared/schema";
+import Link from 'next/link';
+import { type Asset } from '@/types/api';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Music, Palette, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { TrendingUp, Music, Palette, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface AssetCardProps {
   asset: Asset;
@@ -39,12 +39,12 @@ export function AssetCard({ asset }: AssetCardProps) {
                 variant="secondary"
                 className="backdrop-blur-md bg-white/10 border-white/20 text-white hover:bg-white/20"
               >
-                {asset.type === "art" ? (
+                {asset.type === 'art' ? (
                   <Palette className="w-3 h-3 mr-1" />
                 ) : (
                   <Music className="w-3 h-3 mr-1" />
                 )}
-                {asset.type === "art" ? "Fine Art" : "Music Royalties"}
+                {asset.type === 'art' ? 'Fine Art' : 'Music Royalties'}
               </Badge>
             </div>
             <div className="absolute bottom-3 left-3 right-3 z-20 flex justify-between items-end">
@@ -74,11 +74,11 @@ export function AssetCard({ asset }: AssetCardProps) {
                 <div className="flex items-center">
                   <div
                     className={`w-2 h-2 rounded-full mr-2 ${
-                      asset.riskLevel === "low"
-                        ? "bg-green-500"
-                        : asset.riskLevel === "medium"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                      asset.riskLevel === 'low'
+                        ? 'bg-green-500'
+                        : asset.riskLevel === 'medium'
+                        ? 'bg-yellow-500'
+                        : 'bg-red-500'
                     }`}
                   />
                   <span className="capitalize text-sm font-medium">
