@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { storage } from "@/lib/storage";
 import { z } from "zod";
 
-// Force Node.js runtime (required for database connections)
-export const runtime = "nodejs";
 
 const investSchema = z.object({
   assetId: z.number(),

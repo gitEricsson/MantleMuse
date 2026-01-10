@@ -3,8 +3,6 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { storage } from "@/lib/storage";
 
-// Force Node.js runtime (required for bcrypt and database connections)
-export const runtime = "nodejs";
 
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),

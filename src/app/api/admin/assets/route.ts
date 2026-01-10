@@ -3,8 +3,6 @@ import { auth } from "@/lib/auth";
 import { storage } from "@/lib/storage";
 import { z } from "zod";
 
-// Force Node.js runtime (required for database connections)
-export const runtime = "nodejs";
 
 const createAssetSchema = z.object({
   name: z.string().min(1, "Name is required"),

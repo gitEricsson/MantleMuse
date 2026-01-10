@@ -1,22 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { seedDatabase } from "@/lib/seed";
 
-// Force Node.js runtime (required for database connections)
-export const runtime = "nodejs";
-
 export async function POST(request: NextRequest) {
   try {
-    // In production, you'd want to add authentication/authorization here
-    // to prevent unauthorized database seeding
-
     await seedDatabase();
-
     return NextResponse.json({
       success: true,
-      message: "Database seeded successfully with 20 assets",
+      message: "Database seeded successfully",
     });
   } catch (error) {
-    console.error("Error seeding database:", error);
+    console.error("Seed error:", error);
     return NextResponse.json(
       {
         success: false,
@@ -28,10 +21,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   return NextResponse.json({
-    message: "Use POST method to seed the database",
-    endpoint: "/api/seed",
-    method: "POST",
+    message: "Use POST to seed database",
   });
 }

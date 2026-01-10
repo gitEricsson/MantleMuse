@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { storage } from "@/lib/storage";
 
-// Force Node.js runtime (required for database connections)
-export const runtime = "nodejs";
-
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -20,7 +17,6 @@ export async function GET(request: NextRequest) {
 
     let assets = await storage.getAssets(filters);
 
-    // Apply search filter if search term exists
     if (search) {
       assets = assets.filter(
         (asset) =>

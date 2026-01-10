@@ -3,6 +3,10 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
 
+  experimental: {
+    serverComponentsExternalPackages: ["bcryptjs", "pg"],
+  },
+
   images: {
     remotePatterns: [
       {
@@ -24,11 +28,6 @@ const nextConfig = {
       tls: false,
     };
     return config;
-  },
-
-  // Environment variables exposed to the browser
-  env: {
-    DATABASE_URL: process.env.DATABASE_URL,
   },
 };
 

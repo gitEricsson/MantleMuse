@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { storage } from "@/lib/storage";
 
-// Force Node.js runtime (required for database connections)
-export const runtime = "nodejs";
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
