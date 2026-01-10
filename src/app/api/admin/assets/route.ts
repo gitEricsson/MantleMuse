@@ -3,6 +3,9 @@ import { auth } from "@/lib/auth";
 import { storage } from "@/lib/storage";
 import { z } from "zod";
 
+// Force Node.js runtime (required for database connections)
+export const runtime = "nodejs";
+
 const createAssetSchema = z.object({
   name: z.string().min(1, "Name is required"),
   type: z.enum(["art", "music"]),
@@ -28,7 +31,7 @@ export async function POST(request: NextRequest) {
     if (!session || session.user.role !== "admin") {
       return NextResponse.json(
         { message: "Unauthorized - Admin access required" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -47,14 +50,14 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: "Invalid input", errors: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     console.error("Error creating asset:", error);
     return NextResponse.json(
       { message: "Failed to create asset" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -66,7 +69,7 @@ export async function GET(request: NextRequest) {
     if (!session || session.user.role !== "admin") {
       return NextResponse.json(
         { message: "Unauthorized - Admin access required" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -78,7 +81,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching assets:", error);
     return NextResponse.json(
       { message: "Failed to fetch assets" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -90,7 +93,7 @@ export async function PATCH(request: NextRequest) {
     if (!session || session.user.role !== "admin") {
       return NextResponse.json(
         { message: "Unauthorized - Admin access required" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -100,7 +103,7 @@ export async function PATCH(request: NextRequest) {
     if (!id) {
       return NextResponse.json(
         { message: "Asset ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -112,7 +115,7 @@ export async function PATCH(request: NextRequest) {
     console.error("Error updating asset:", error);
     return NextResponse.json(
       { message: "Failed to update asset" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

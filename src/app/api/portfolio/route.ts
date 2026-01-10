@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { storage } from "@/lib/storage";
 
+// Force Node.js runtime (required for database connections)
+export const runtime = "nodejs";
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -9,7 +12,7 @@ export async function GET(request: NextRequest) {
     if (!walletAddress) {
       return NextResponse.json(
         { message: "Wallet address is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -28,15 +31,15 @@ export async function GET(request: NextRequest) {
     // Calculate portfolio totals
     const totalInvested = investments.reduce(
       (sum, inv) => sum + Number(inv.costBasis),
-      0
+      0,
     );
     const currentValue = investments.reduce(
       (sum, inv) => sum + Number(inv.currentValue),
-      0
+      0,
     );
     const totalEarned = investments.reduce(
       (sum, inv) => sum + Number(inv.totalEarned),
-      0
+      0,
     );
 
     return NextResponse.json({
@@ -49,7 +52,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching portfolio:", error);
     return NextResponse.json(
       { message: "Failed to fetch portfolio" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

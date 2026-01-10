@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { storage } from "@/lib/storage";
 import { z } from "zod";
 
+// Force Node.js runtime (required for database connections)
+export const runtime = "nodejs";
+
 const investSchema = z.object({
   assetId: z.number(),
   amount: z.number().positive(),
@@ -25,10 +28,7 @@ export async function POST(request: NextRequest) {
     // Get asset
     const asset = await storage.getAsset(input.assetId);
     if (!asset) {
-      return NextResponse.json(
-        { message: "Asset not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Asset not found" }, { status: 404 });
     }
 
     // Calculate shares to buy
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     if (sharesToBuy <= 0) {
       return NextResponse.json(
         { message: "Investment amount too low for 1 share" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -51,10 +51,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Update or create investment
-    const existingInvestment = await storage.getInvestment(
-      user.id,
-      asset.id
-    );
+    const existingInvestment = await storage.getInvestment(user.id, asset.id);
 
     let investment;
     if (existingInvestment) {
@@ -70,7 +67,7 @@ export async function POST(request: NextRequest) {
         existingInvestment.id,
         newShares,
         newCostBasis,
-        newCurrentValue
+        newCurrentValue,
       );
     } else {
       investment = await storage.createInvestment({
@@ -92,14 +89,14 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: "Invalid request data", errors: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     console.error("Error processing investment:", error);
     return NextResponse.json(
       { message: "Failed to process investment" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -3,6 +3,9 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { storage } from "@/lib/storage";
 
+// Force Node.js runtime (required for bcrypt and database connections)
+export const runtime = "nodejs";
+
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -19,7 +22,7 @@ export async function POST(request: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         { message: "User with this email already exists" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -31,7 +34,7 @@ export async function POST(request: NextRequest) {
       email,
       hashedPassword,
       name,
-      "user"
+      "user",
     );
 
     return NextResponse.json(
@@ -44,20 +47,20 @@ export async function POST(request: NextRequest) {
           name: user.name,
         },
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: "Invalid input", errors: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     console.error("Registration error:", error);
     return NextResponse.json(
       { message: "Failed to register user" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

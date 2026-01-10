@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { storage } from "@/lib/storage";
 import { z } from "zod";
 
+// Force Node.js runtime (required for database connections)
+export const runtime = "nodejs";
+
 const sellSchema = z.object({
   assetId: z.number(),
   shares: z.number().positive().int(),
@@ -16,19 +19,13 @@ export async function POST(request: NextRequest) {
     // Get user
     const user = await storage.getUserByWallet(input.walletAddress);
     if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     // Get asset
     const asset = await storage.getAsset(input.assetId);
     if (!asset) {
-      return NextResponse.json(
-        { message: "Asset not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Asset not found" }, { status: 404 });
     }
 
     // Get investment
@@ -36,7 +33,7 @@ export async function POST(request: NextRequest) {
     if (!investment || investment.sharesOwned < input.shares) {
       return NextResponse.json(
         { message: "Insufficient shares" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -69,7 +66,7 @@ export async function POST(request: NextRequest) {
         investment.id,
         newShares,
         newCostBasis,
-        newCurrentValue
+        newCurrentValue,
       );
     }
 
@@ -81,14 +78,14 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: "Invalid request data", errors: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     console.error("Error processing sale:", error);
     return NextResponse.json(
       { message: "Failed to process sale" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { seedDatabase } from "@/lib/seed";
 
+// Force Node.js runtime (required for database connections)
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     // In production, you'd want to add authentication/authorization here
@@ -18,9 +21,9 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         message: "Failed to seed database",
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
