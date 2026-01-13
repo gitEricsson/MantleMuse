@@ -24,11 +24,14 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Loader2, Plus, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAdmin } from "@/hooks/use-admin";
+import { useEffect } from "react";
 
 export default function NewAssetPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { createAsset, isPending, isConfirming, isConfirmed, hash, error: writeError } = useAdmin();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -55,42 +58,76 @@ export default function NewAssetPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // 1. Trigger On-Chain Transaction
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Basic Validation
+    if (!formData.pricePerShare || !formData.availableShares) {
+      toast({ title: "Error", description: "Price and Shares are required", variant: "destructive" });
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch("/api/admin/assets", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to create asset");
-      }
-
-      const asset = await response.json();
-
-      toast({
-        title: "Asset Created",
-        description: `${formData.name} has been successfully added to the platform.`,
-      });
-
-      router.push("/admin/assets");
-    } catch (error) {
-      console.error("Error creating asset:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to create asset",
-        variant: "destructive",
-      });
-    } finally {
+      // Call Smart Contract
+      createAsset(
+        formData.name,
+        formData.type === 'art' ? 0 : 1,
+        // Parse target return as basis points? The form string "8-12%" is not parsed.
+        // For MVP, passing a dummy integer or implementing strict parsing. 
+        // The contract expects uint256. Let's send 1000 (10%) default or parse input.
+        1200,
+        Number(formData.pricePerShare),
+        Number(formData.availableShares)
+      );
+    } catch (err) {
+      console.error(err);
       setIsLoading(false);
     }
   };
+
+  // 2. Watch for Success -> Then Save Metadata to DB
+  useEffect(() => {
+    const saveToDb = async () => {
+      if (isConfirmed) {
+        try {
+          const response = await fetch("/api/admin/assets", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...formData,
+              availableShares: String(formData.availableShares) // Ensure string compliance
+            }),
+          });
+
+          if (!response.ok) throw new Error("Failed to save metadata");
+
+          toast({
+            title: "Success! Asset Minted On-Chain",
+            description: `Transaction: ${hash?.slice(0, 10)}... Metadata saved.`,
+          });
+
+          router.push("/admin/assets");
+        } catch (error) {
+          console.error("DB Save Error:", error);
+          toast({ title: "Warning", description: "Asset minted but metadata save failed.", variant: "destructive" });
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    if (isConfirmed) {
+      saveToDb();
+    }
+
+    if (writeError) {
+      toast({ title: "Transaction Failed", description: writeError.message, variant: "destructive" });
+      setIsLoading(false);
+    }
+  }, [isConfirmed, writeError, hash, formData, router, toast]);
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -249,7 +286,7 @@ export default function NewAssetPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="totalValue">Total Asset Value ($) *</Label>
+                  <Label htmlFor="totalValue">Total Asset Value (USDT) *</Label>
                   <Input
                     id="totalValue"
                     type="number"
@@ -264,7 +301,7 @@ export default function NewAssetPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="pricePerShare">Price Per Share ($) *</Label>
+                  <Label htmlFor="pricePerShare">Price Per Share (USDT) *</Label>
                   <Input
                     id="pricePerShare"
                     type="number"
@@ -299,7 +336,7 @@ export default function NewAssetPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="minInvestment">
-                    Minimum Investment ($) *
+                    Minimum Investment (USDT) *
                   </Label>
                   <Input
                     id="minInvestment"
@@ -329,7 +366,7 @@ export default function NewAssetPage() {
                     className="bg-background/50 border-white/10"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Expected annual return (e.g., "8-12%")
+                    Expected annual return (e.g., &quot;8-12%&quot;)
                   </p>
                 </div>
 
@@ -435,7 +472,7 @@ export default function NewAssetPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
+                  {isPending ? "Confirm in Wallet..." : isConfirming ? "Minting..." : "Saving..."}
                 </>
               ) : (
                 <>

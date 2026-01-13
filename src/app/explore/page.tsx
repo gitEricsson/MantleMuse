@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -127,10 +128,17 @@ export default function ExplorePage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="h-[400px] rounded-xl bg-card animate-pulse border border-white/5"
-              />
+              <div key={i} className="flex flex-col space-y-4">
+                <Skeleton className="aspect-[4/3] w-full rounded-2xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="flex justify-between items-center pt-2">
+                  <Skeleton className="h-5 w-20" />
+                  <Skeleton className="h-9 w-24 rounded-full" />
+                </div>
+              </div>
             ))}
           </div>
         ) : showNoResults ? (

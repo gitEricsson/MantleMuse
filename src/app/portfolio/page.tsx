@@ -1,25 +1,31 @@
 "use client";
 
-import { useWallet } from "@/context/WalletContext";
-import { usePortfolio } from "@/hooks/use-portfolio";
-import { useSell } from "@/hooks/use-transactions";
+import { useAccount } from "wagmi";
+import { useAppKit } from "@reown/appkit/react";
+import { useMyInvestments } from "@/hooks/use-my-investments";
+import { useClaim } from "@/hooks/use-claim";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Loader2, TrendingUp, DollarSign, PieChart, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
+import { INITIAL_ASSETS } from "@/lib/storage";
+import { Skeleton } from "@/components/ui/skeleton";
+import { CurrencyDisplay } from "@/components/CurrencyDisplay";
 
 export default function PortfolioPage() {
-  const { isConnected, walletAddress, connectWallet } = useWallet();
-  const { data: portfolio, isLoading } = usePortfolio(walletAddress);
-  const sellMutation = useSell();
+  const { address, isConnected } = useAccount();
+  const { open } = useAppKit();
+  const { investments, isLoading, refetch } = useMyInvestments();
+  const { claim, isPending: isClaimPending, isConfirming: isClaimConfirming } = useClaim();
+  const [claimId, setClaimId] = useState<number | null>(null);
 
-  // Sell State
-  const [selectedAsset, setSelectedAsset] = useState<any>(null);
-  const [sellShares, setSellShares] = useState<string>('');
+  const handleClaim = (assetId: number) => {
+    setClaimId(assetId);
+    claim(assetId);
+  };
 
   if (!isConnected) {
     return (
@@ -31,7 +37,7 @@ export default function PortfolioPage() {
         <p className="text-muted-foreground max-w-md text-center">
           Connect your wallet to view your portfolio holdings, track performance, and manage your assets.
         </p>
-        <Button size="lg" onClick={connectWallet} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+        <Button size="lg" onClick={() => open()} className="bg-primary hover:bg-primary/90 text-primary-foreground">
           Connect Wallet
         </Button>
       </div>
@@ -40,34 +46,75 @@ export default function PortfolioPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="min-h-screen bg-background pt-10 pb-20">
+        <div className="container mx-auto px-4">
+          <Skeleton className="h-10 w-48 mb-8" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="bg-card border-white/10">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-4 rounded-full" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-8 w-32" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <Card className="bg-card border-white/10">
+            <CardHeader>
+              <Skeleton className="h-6 w-32" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-center justify-between py-4 border-b border-white/5">
+                    <div className="flex items-center space-x-3">
+                      <Skeleton className="h-8 w-8 rounded" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-8 w-16" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
-  const handleSellClick = (investment: any) => {
-    setSelectedAsset(investment);
-    setSellShares('');
-  };
+  // Calculate Portfolio Stats
+  let totalInvested = 0;
+  let currentValue = 0;
+  let totalEarned = 0;
 
-  const handleConfirmSell = async () => {
-    if (!walletAddress || !selectedAsset) return;
-    try {
-      await sellMutation.mutateAsync({
-        assetId: selectedAsset.assetId,
-        shares: Number(sellShares),
-        walletAddress
-      });
-      setSelectedAsset(null);
-    } catch (e) {
-      // Handled by mutation hook
-    }
-  };
+  const portfolioItems = investments.map(inv => {
+    const asset = INITIAL_ASSETS.find(a => a.id === inv.assetId);
+    if (!asset) return null;
 
-  const estimatedProceeds = selectedAsset && sellShares
-    ? (Number(sellShares) * parseFloat(selectedAsset.asset.pricePerShare)).toFixed(2)
-    : "0.00";
+    const shares = BigInt(inv.balance);
+    const sharesNum = Number(inv.balance);
+    const price = parseFloat(asset.pricePerShare);
+
+    const value = sharesNum * price;
+    const earned = parseFloat(inv.pendingYield);
+
+    totalInvested += value;
+    currentValue += value;
+    totalEarned += earned;
+
+    return {
+      ...inv,
+      asset,
+      currentValue: value,
+      sharesOwned: shares.toString()
+    };
+  }).filter(Boolean);
 
   return (
     <div className="min-h-screen bg-background pt-10 pb-20">
@@ -78,29 +125,29 @@ export default function PortfolioPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <Card className="bg-card border-white/10">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Invested</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Value</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${parseFloat(portfolio?.totalInvested || '0').toLocaleString()}</div>
+              <CurrencyDisplay value={currentValue.toLocaleString()} size="lg" className="text-white" />
             </CardContent>
           </Card>
           <Card className="bg-card border-white/10">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Current Value</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Holdings</CardTitle>
               <PieChart className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-primary">${parseFloat(portfolio?.currentValue || '0').toLocaleString()}</div>
+              <div className="text-2xl font-bold text-primary">{portfolioItems.length} Assets</div>
             </CardContent>
           </Card>
           <Card className="bg-card border-white/10">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Earned</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Unclaimed Yield</CardTitle>
               <TrendingUp className="h-4 w-4 text-secondary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-secondary">+${parseFloat(portfolio?.totalEarned || '0').toLocaleString()}</div>
+              <CurrencyDisplay value={totalEarned.toLocaleString()} size="lg" className="text-secondary" />
             </CardContent>
           </Card>
         </div>
@@ -111,45 +158,63 @@ export default function PortfolioPage() {
             <CardTitle>Holdings</CardTitle>
           </CardHeader>
           <CardContent>
-            {portfolio?.investments.length === 0 ? (
-               <div className="text-center py-12">
-                 <p className="text-muted-foreground mb-4">You don't own any assets yet.</p>
-                 <Link href="/explore" passHref>
-                   <Button>Browse Marketplace</Button>
-                 </Link>
-               </div>
+            {portfolioItems.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground mb-4">You don&apos;t own any assets yet.</p>
+                <Link href="/explore" passHref>
+                  <Button>Browse Marketplace</Button>
+                </Link>
+              </div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow className="border-white/5 hover:bg-transparent">
                     <TableHead>Asset</TableHead>
                     <TableHead>Type</TableHead>
-                    <TableHead>Shares Owned</TableHead>
-                    <TableHead>Current Value</TableHead>
+                    <TableHead>Shares</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>Pending Yield</TableHead>
                     <TableHead className="text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {portfolio?.investments.map((inv: any) => (
-                    <TableRow key={inv.id} className="border-white/5">
+                  {portfolioItems.map((item: any) => (
+                    <TableRow key={item.assetId} className="border-white/5">
                       <TableCell className="font-medium">
-                        <div className="flex items-center space-x-3">
-                          <img src={inv.asset.imageUrl} alt="" className="w-8 h-8 rounded object-cover bg-muted" />
-                          <span>{inv.asset.name}</span>
-                        </div>
+                        <Link href={`/assets/${item.assetId}`} className="flex items-center space-x-3 hover:text-primary transition-colors">
+                          <div className="relative w-8 h-8 rounded overflow-hidden bg-muted">
+                            <Image
+                              src={item.asset.imageUrl}
+                              alt={item.asset.name}
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
+                          <span>{item.asset.name}</span>
+                        </Link>
                       </TableCell>
-                      <TableCell className="capitalize text-muted-foreground">{inv.asset.type}</TableCell>
-                      <TableCell>{inv.sharesOwned}</TableCell>
-                      <TableCell>${parseFloat(inv.currentValue).toLocaleString()}</TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-white/10 hover:bg-white/5"
-                          onClick={() => handleSellClick(inv)}
-                        >
-                          Sell
-                        </Button>
+                      <TableCell className="capitalize text-muted-foreground">{item.asset.type}</TableCell>
+                      <TableCell>{item.sharesOwned}</TableCell>
+                      <TableCell><CurrencyDisplay value={item.currentValue.toLocaleString()} showLogo={true} size="sm" /></TableCell>
+                      <TableCell className="text-secondary font-medium"><CurrencyDisplay value={`+${item.pendingYield}`} showLogo={true} size="sm" className="text-secondary" /></TableCell>
+                      <TableCell className="text-right space-x-2">
+                        {parseFloat(item.pendingYield) > 0 && (
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="bg-green-600/20 text-green-400 hover:bg-green-600/30"
+                            disabled={(isClaimPending || isClaimConfirming) && claimId === item.assetId}
+                            onClick={() => handleClaim(item.assetId)}
+                          >
+                            {(isClaimPending || isClaimConfirming) && claimId === item.assetId ? "Claiming..." : "Claim"}
+                          </Button>
+                        )}
+                        <Link href={`/assets/${item.assetId}`}>
+                          <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5">
+                            View
+                          </Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -159,47 +224,6 @@ export default function PortfolioPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Sell Modal */}
-      <Dialog open={!!selectedAsset} onOpenChange={(open) => !open && setSelectedAsset(null)}>
-        <DialogContent className="bg-card border-white/10">
-          <DialogHeader>
-            <DialogTitle>Sell Shares</DialogTitle>
-            <DialogDescription>
-              {selectedAsset?.asset.name} - Available: {selectedAsset?.sharesOwned}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="py-4 space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Shares to Sell</label>
-              <Input
-                type="number"
-                value={sellShares}
-                onChange={(e) => setSellShares(e.target.value)}
-                max={selectedAsset?.sharesOwned}
-                className="bg-background border-white/10"
-              />
-            </div>
-
-            <div className="bg-white/5 p-4 rounded-lg flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Estimated Proceeds</span>
-              <span className="text-xl font-bold font-mono">${estimatedProceeds}</span>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setSelectedAsset(null)}>Cancel</Button>
-            <Button
-              onClick={handleConfirmSell}
-              disabled={sellMutation.isPending || !sellShares || Number(sellShares) <= 0 || Number(sellShares) > selectedAsset?.sharesOwned}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {sellMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Confirm Sell"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

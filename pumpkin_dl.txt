@@ -1,0 +1,98 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host unsplash.com:443 was resolved.
+* IPv6: (none)
+* IPv4: 151.101.129.181, 151.101.65.181, 151.101.1.181, 151.101.193.181
+*   Trying 151.101.129.181:443...
+* Connected to unsplash.com (151.101.129.181) port 443
+* ALPN: curl offers h2,http/1.1
+* (304) (OUT), TLS handshake, Client hello (1):
+} [317 bytes data]
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* (304) (IN), TLS handshake, Server hello (2):
+{ [100 bytes data]
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+{ [2815 bytes data]
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+{ [300 bytes data]
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+{ [4 bytes data]
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+} [37 bytes data]
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+} [1 bytes data]
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+} [16 bytes data]
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+{ [1 bytes data]
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+{ [16 bytes data]
+* SSL connection using TLSv1.2 / ECDHE-RSA-CHACHA20-POLY1305 / [blank] / UNDEF
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: CN=unsplash.com
+*  start date: Dec  8 18:00:14 2025 GMT
+*  expire date: Jan  9 18:00:13 2027 GMT
+*  subjectAltName: host "unsplash.com" matched cert's "unsplash.com"
+*  issuer: C=BE; O=GlobalSign nv-sa; CN=GlobalSign Atlas R3 DV TLS CA 2025 Q4
+*  SSL certificate verify ok.
+* using HTTP/2
+* [HTTP/2] [1] OPENED stream for https://unsplash.com/photos/o-S03w_S20o/download
+* [HTTP/2] [1] [:method: HEAD]
+* [HTTP/2] [1] [:scheme: https]
+* [HTTP/2] [1] [:authority: unsplash.com]
+* [HTTP/2] [1] [:path: /photos/o-S03w_S20o/download]
+* [HTTP/2] [1] [user-agent: curl/8.7.1]
+* [HTTP/2] [1] [accept: */*]
+> HEAD /photos/o-S03w_S20o/download HTTP/2
+> Host: unsplash.com
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/2 404 
+< content-type: text/html; charset=UTF-8
+< nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+< report-to: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=ESHAzKLdZZc99Oug3jBo73mq2gD1BnuvRTSzvZ%2FaxPE%3D\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\u0026ts=1768296799"}],"max_age":3600}
+< reporting-endpoints: heroku-nel="https://nel.heroku.com/reports?s=ESHAzKLdZZc99Oug3jBo73mq2gD1BnuvRTSzvZ%2FaxPE%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1768296799"
+< server: Heroku
+< via: 1.1 heroku-router, 1.1 varnish
+< x-request-id: e527b2b4-9212-a643-8d23-36505eb116fd
+< x-runtime: 0.023348
+< fastly-is-origin: 1
+< fastly-backend-name: F_rails_backend
+< accept-ranges: bytes
+< date: Tue, 13 Jan 2026 09:33:19 GMT
+< x-served-by: cache-par-lfpg1960023-PAR
+< x-cache: MISS
+< x-cache-hits: 0
+< vary: Accept-Encoding, Accept
+< strict-transport-security: max-age=31449600
+< set-cookie: require_cookie_consent=false; Expires=Wed, 13 Jan 2027 09:33:19 GMT; path=/;
+< content-length: 7151
+< 
+{ [0 bytes data]
+  0  7151    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0
+* Connection #0 to host unsplash.com left intact
+HTTP/2 404 
+content-type: text/html; charset=UTF-8
+nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+report-to: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=ESHAzKLdZZc99Oug3jBo73mq2gD1BnuvRTSzvZ%2FaxPE%3D\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\u0026ts=1768296799"}],"max_age":3600}
+reporting-endpoints: heroku-nel="https://nel.heroku.com/reports?s=ESHAzKLdZZc99Oug3jBo73mq2gD1BnuvRTSzvZ%2FaxPE%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1768296799"
+server: Heroku
+via: 1.1 heroku-router, 1.1 varnish
+x-request-id: e527b2b4-9212-a643-8d23-36505eb116fd
+x-runtime: 0.023348
+fastly-is-origin: 1
+fastly-backend-name: F_rails_backend
+accept-ranges: bytes
+date: Tue, 13 Jan 2026 09:33:19 GMT
+x-served-by: cache-par-lfpg1960023-PAR
+x-cache: MISS
+x-cache-hits: 0
+vary: Accept-Encoding, Accept
+strict-transport-security: max-age=31449600
+set-cookie: require_cookie_consent=false; Expires=Wed, 13 Jan 2027 09:33:19 GMT; path=/;
+content-length: 7151
+
