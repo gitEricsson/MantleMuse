@@ -23,7 +23,13 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'; // Assuming you have shadcn accordion
+} from '@/components/ui/accordion';
+import { Skeleton } from '@/components/ui/skeleton';
+import { CurrencyDisplay } from '@/components/CurrencyDisplay';
+import { MarketPulse } from '@/components/MarketPulse';
+import { WhyMantleSection } from '@/components/WhyMantleSection';
+import { ActivityFeed } from '@/components/ActivityFeed';
+import { PartnersSection } from '@/components/PartnersSection';
 
 // --- Components ---
 
@@ -84,20 +90,29 @@ const HeroSection = () => {
           {/* Mini Stats */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/10 pt-8">
             {[
-              { label: 'Total Value Locked', value: '$12.4M+' },
+              { label: 'Total Value Locked', value: '12.4M+' },
               { label: 'Artworks Tokenized', value: '145' },
-              { label: 'Royalties Distributed', value: '$2.1M' },
+              { label: 'Royalties Distributed', value: '2.1M' },
               { label: 'Mantle APY', value: '8-12%' },
             ].map((stat, i) => (
               <div key={i}>
-                <p className="text-2xl md:text-3xl font-bold text-white font-display">
-                  {stat.value}
-                </p>
+                <div className="text-2xl md:text-3xl font-bold text-white font-display flex items-baseline justify-center gap-1">
+                  {stat.label.includes('Artworks') || stat.label.includes('APY') ? (
+                    stat.value
+                  ) : (
+                    <CurrencyDisplay value={stat.value} showLogo={true} size="lg" className="justify-center" />
+                  )}
+                </div>
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">
                   {stat.label}
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Market Pulse Indicator */}
+          <div className="mt-8 flex justify-center">
+            <MarketPulse />
           </div>
         </motion.div>
       </div>
@@ -168,7 +183,7 @@ const WhyInvestSection = () => {
                 </h3>
                 <p className="text-muted-foreground text-sm">
                   Goldman Sachs predicts global music revenue to double to
-                  roughly $131 billion by 2030. Earn passive yield from every
+                  roughly 131B USDT by 2030. Earn passive yield from every
                   stream.
                 </p>
               </div>
@@ -229,6 +244,8 @@ const WhyInvestSection = () => {
   );
 };
 
+// Moved to dedicated component: WhyMantleSection
+
 const FAQSection = () => {
   const faqs = [
     {
@@ -244,7 +261,7 @@ const FAQSection = () => {
     {
       question: 'Can I sell my tokens?',
       answer:
-        'Yes! Unlike traditional art investing where money is locked for years, MantleMuse provides a secondary market (AMMs) where you can trade your asset tokens for USDC or MNT at any time.',
+        'Yes! Unlike traditional art investing where money is locked for years, MantleMuse provides a secondary market (AMMs) where you can trade your asset tokens for USDT or MNT at any time.',
     },
     {
       question: 'Is this safe?',
@@ -315,12 +332,19 @@ export default function Home() {
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="h-[450px] rounded-3xl bg-card/50 animate-pulse border border-white/5"
-                />
+                <div key={i} className="flex flex-col space-y-4">
+                  <Skeleton className="aspect-[4/3] w-full rounded-2xl" />
+                  <div className="space-y-2 px-1">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                  <div className="flex justify-between items-center px-1 pt-2">
+                    <Skeleton className="h-5 w-20" />
+                    <Skeleton className="h-9 w-24 rounded-full" />
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -338,12 +362,21 @@ export default function Home() {
               ))}
             </div>
           )}
+
+          {/* Activity Feed */}
+          <div className="mt-16">
+            <ActivityFeed />
+          </div>
         </div>
       </section>
 
       <WhyInvestSection />
 
+      <WhyMantleSection />
+
       <FAQSection />
+
+      <PartnersSection />
 
       {/* Final CTA */}
       <section className="py-32 relative overflow-hidden">
@@ -357,7 +390,7 @@ export default function Home() {
             <span className="text-white">Cultural Portfolio</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Join thousands of investors using MantleMuse to access the $1.7T
+            Join thousands of investors using MantleMuse to access the 1.7T USDT
             alternative asset market.
           </p>
           <div className="flex justify-center">

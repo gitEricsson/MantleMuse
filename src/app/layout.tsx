@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from './providers';
 import { Navbar } from '@/components/Navbar';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'Mantle Muse',
@@ -21,6 +22,7 @@ export default function RootLayout({
           <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">
             <Navbar />
             <main>{children}</main>
+            <Toaster richColors position="top-center" theme="dark" />
 
             {/* Footer */}
             <footer className="border-t border-white/10 bg-black py-12">
@@ -39,14 +41,14 @@ export default function RootLayout({
                   © {new Date().getFullYear()} MantleMuse. All rights reserved.
                 </div>
                 <div className="flex justify-center space-x-6">
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <a href="/legal" className="hover:text-primary transition-colors">
+                    Legal
+                  </a>
+                  <a href="/legal" className="hover:text-primary transition-colors">
                     Terms
                   </a>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Privacy
-                  </a>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Support
+                  <a href="/kyc" className="hover:text-primary transition-colors">
+                    Verify
                   </a>
                 </div>
               </div>

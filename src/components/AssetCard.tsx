@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { type Asset } from '@/types/api';
 import {
   Card,
@@ -9,14 +10,31 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, Music, Palette, ArrowRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Music, Palette, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { CurrencyDisplay } from './CurrencyDisplay';
 
 interface AssetCardProps {
   asset: Asset;
 }
 
+import { useMuseAsset } from '@/hooks/use-muse-asset';
+import { formatUnits } from 'viem';
+
+
+
 export function AssetCard({ asset }: AssetCardProps) {
+  const { getAssetDetails, getTotalSupply } = useMuseAsset();
+  const { data: onChainAsset, isLoading } = getAssetDetails(BigInt(asset.id));
+  const { data: totalSupply } = getTotalSupply(BigInt(asset.id));
+
+  // Parse On-Chain Data (or fallback to API data)
+  const price = onChainAsset?.[3] ? formatUnits(onChainAsset[3], 6) : asset.minInvestment; // initialPrice
+  const maxSupply = onChainAsset?.[4] ? Number(onChainAsset[4]) : asset.availableShares;
+  const currentSupply = totalSupply ? Number(totalSupply) : 0;
+  const available = maxSupply - currentSupply;
+  const isActive = onChainAsset?.[5] ?? true;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -29,10 +47,12 @@ export function AssetCard({ asset }: AssetCardProps) {
           {/* Image Container with Overlay */}
           <div className="relative aspect-[4/3] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent z-10" />
-            <img
+            <Image
               src={asset.imageUrl}
               alt={asset.name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              unoptimized
             />
             <div className="absolute top-3 left-3 z-20">
               <Badge
@@ -47,6 +67,28 @@ export function AssetCard({ asset }: AssetCardProps) {
                 {asset.type === 'art' ? 'Fine Art' : 'Music Royalties'}
               </Badge>
             </div>
+            {/* Valuation Trend Badge */}
+            {asset.valuationChange && (
+              <div className="absolute top-3 right-3 z-20">
+                <Badge
+                  className={`backdrop-blur-md border text-xs font-mono ${parseFloat(asset.valuationChange) > 0
+                      ? 'bg-green-500/20 border-green-500/30 text-green-400'
+                      : parseFloat(asset.valuationChange) < 0
+                        ? 'bg-red-500/20 border-red-500/30 text-red-400'
+                        : 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400'
+                    }`}
+                >
+                  {parseFloat(asset.valuationChange) > 0 ? (
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                  ) : parseFloat(asset.valuationChange) < 0 ? (
+                    <TrendingDown className="w-3 h-3 mr-1" />
+                  ) : (
+                    <Minus className="w-3 h-3 mr-1" />
+                  )}
+                  {parseFloat(asset.valuationChange) > 0 ? '+' : ''}{asset.valuationChange}%
+                </Badge>
+              </div>
+            )}
             <div className="absolute bottom-3 left-3 right-3 z-20 flex justify-between items-end">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">
@@ -63,23 +105,22 @@ export function AssetCard({ asset }: AssetCardProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-muted-foreground mb-1">
-                  Target Return
+                  Price / Share
                 </p>
-                <p className="font-semibold text-primary">
-                  {asset.targetReturn}
-                </p>
+                <div className="font-semibold text-primary">
+                  {isLoading ? "..." : <CurrencyDisplay value={price} />}
+                </div>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground mb-1">Risk Level</p>
                 <div className="flex items-center">
                   <div
-                    className={`w-2 h-2 rounded-full mr-2 ${
-                      asset.riskLevel === 'low'
-                        ? 'bg-green-500'
-                        : asset.riskLevel === 'medium'
+                    className={`w-2 h-2 rounded-full mr-2 ${asset.riskLevel === 'low'
+                      ? 'bg-green-500'
+                      : asset.riskLevel === 'medium'
                         ? 'bg-yellow-500'
                         : 'bg-red-500'
-                    }`}
+                      }`}
                   />
                   <span className="capitalize text-sm font-medium">
                     {asset.riskLevel}
@@ -89,9 +130,9 @@ export function AssetCard({ asset }: AssetCardProps) {
             </div>
 
             <div className="pt-2 border-t border-white/5 flex justify-between items-center text-sm">
-              <span className="text-muted-foreground">Min Investment</span>
-              <span className="font-mono font-medium">
-                ${asset.minInvestment}
+              <span className="text-muted-foreground">Available</span>
+              <span className="font-mono font-medium text-white">
+                {isLoading ? "..." : available.toLocaleString()}
               </span>
             </div>
           </CardContent>

@@ -1,873 +1,362 @@
-# Mantle Muse
+<p align="center">
+  <img src="https://img.shields.io/badge/Mantle-Network-00D1FF?style=for-the-badge&logo=ethereum" alt="Mantle Network" />
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity" alt="Solidity" />
+  <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
+</p>
 
-A modern fractional ownership platform for art and music royalties, built with Next.js 14 and powered by the Mantle Network.
+<h1 align="center">🎨 MantleMuse</h1>
 
-## 🎯 Overview
+<p align="center">
+  <strong>Fractional Ownership of Art & Music — Powered by Mantle</strong>
+</p>
 
-Mantle Muse democratizes access to high-value cultural assets through blockchain-based fractional ownership. Invest in blue-chip art pieces and music royalty catalogs with as little as $50.
+<p align="center">
+  Own a piece of a Basquiat. Earn royalties from streaming hits. <br/>
+  MantleMuse brings Real World Assets on-chain with institutional-grade compliance.
+</p>
+
+<p align="center">
+  <a href="#-live-demo">Live Demo</a> •
+  <a href="#-the-problem">The Problem</a> •
+  <a href="#-our-solution">Our Solution</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-getting-started">Getting Started</a>
+</p>
+
+---
+
+## 🚀 Live Demo
+
+| Resource | Link |
+|----------|------|
+| 🌐 **Frontend** | [https://mantle-muse-vvq6.vercel.app/](https://mantle-muse-vvq6.vercel.app/) |
+| 📜 **MuseVault Contract** | [Mantle Sepolia Explorer](https://explorer.sepolia.mantle.xyz/address/YOUR_CONTRACT) |
+| 🎥 **Demo Video** | [Watch on YouTube](#) |
+
+---
+
+## 💡 The Problem
+
+**Alternative assets are the best-performing asset class of the last decade** — yet they remain locked behind six-figure minimums, illiquid holding periods, and exclusive gallery relationships.
+
+| The Reality Today | The Impact |
+|-------------------|------------|
+| A single Basquiat painting sells for $110M | 99.9% of investors are priced out |
+| Music royalty funds require $100K+ minimums | Passive income reserved for the wealthy |
+| Art investments lock capital for 7-10 years | No liquidity when you need it |
+| Opaque valuations and hidden fees | Investors can't make informed decisions |
+
+The alternative asset market is worth **$1.7 trillion** — and almost none of it is accessible to regular investors.
+
+---
+
+## 🎯 Our Solution
+
+**MantleMuse tokenizes high-value art and music royalties on Mantle Network**, enabling:
+
+✅ **Fractional Ownership** — Buy shares starting from just $10 USDT  
+✅ **Real Yield** — Quarterly royalty distributions paid directly to your wallet  
+✅ **Instant Liquidity** — Sell your shares anytime through our secondary market  
+✅ **AI-Powered Intelligence** — Get instant valuations before you invest  
+✅ **True Governance** — Vote on exit strategies as a real stakeholder  
+
+### Why Mantle?
+
+Mantle is the **ideal home for Real World Assets**:
+
+| Mantle Advantage | Why It Matters for RWA |
+|------------------|------------------------|
+| **Ultra-low gas fees** | Micro-investments become economically viable |
+| **Ethereum security** | Institutional-grade asset protection |
+| **Native USDT liquidity** | Seamless fiat on/off-ramps for mainstream adoption |
+| **mETH integration** | Compound returns with liquid staking yield |
+| **High throughput** | Handle thousands of dividend distributions efficiently |
+
+---
 
 ## ✨ Features
 
-- 🎨 **Fractional Art Ownership** - Invest in authenticated masterpieces from renowned artists
-- 🎵 **Music Royalty Income** - Earn passive income from streaming and sync licensing
-- 💼 **Portfolio Management** - Track investments, returns, and earnings in real-time
-- 🔒 **Secure Authentication** - Role-based access control with NextAuth.js
-- 👑 **Admin Dashboard** - Complete asset management system for operators
-- 📊 **Risk-Adjusted Returns** - Diversified asset classes with varying risk profiles
-- 🌐 **Global Marketplace** - 20+ curated assets across art and music categories
+### For Investors
+
+| Feature | Description |
+|---------|-------------|
+| 🖼️ **Art Marketplace** | Blue-chip works from Basquiat, Warhol, Kusama, and emerging artists |
+| 🎵 **Music Royalties** | Curated catalogs: Afrobeats, Hip-Hop classics, Lo-Fi, Cinematic scores |
+| 📊 **Live Valuations** | Dynamic pricing with Pyth Network oracle integration |
+| 🤖 **AI Fair Value** | One-click valuation estimates with market comparables |
+| 🗳️ **Shareholder Voting** | Participate in governance on exit timing and strategy |
+| 💸 **Secondary Market** | Sell shares instantly at current NAV (5% protocol fee) |
+| 📱 **KYC Verification** | Institutional-grade compliance for regulatory peace of mind |
+
+### For Platform Operators
+
+| Feature | Description |
+|---------|-------------|
+| 🎛️ **Admin Dashboard** | Real-time metrics: TVL, investors, trading volume |
+| ➕ **Asset Onboarding** | Create and mint new tokenized assets on-chain |
+| 💰 **Yield Distribution** | Deposit and distribute royalties to all token holders |
+| 🤖 **AI Valuation Assistant** | Get AI-suggested pricing when listing new assets |
 
 ---
 
-## 📚 Table of Contents
+## 🏗️ Architecture
 
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Quick Start](#-quick-start)
-- [Authentication System](#-authentication-system)
-- [Admin Dashboard](#-admin-dashboard)
-- [API Reference](#-api-reference)
-- [Development](#-development)
-- [Deployment](#-deployment)
-- [Troubleshooting](#-troubleshooting)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         FRONTEND                                 │
+│  Next.js 15 • TypeScript • Wagmi • Reown AppKit • Framer Motion │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      MANTLE NETWORK                              │
+│  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐        │
+│  │   MuseVault   │  │  MuseMarket   │  │   MuseAsset   │        │
+│  │   (ERC-1155)  │  │  (Secondary)  │  │   (Registry)  │        │
+│  │               │  │               │  │               │        │
+│  │ • Mint shares │  │ • Sell shares │  │ • Asset data  │        │
+│  │ • Hold assets │  │ • Buyback     │  │ • Ownership   │        │
+│  │ • Distribute  │  │ • Pricing     │  │ • Metadata    │        │
+│  └───────────────┘  └───────────────┘  └───────────────┘        │
+│                                                                  │
+│  ┌───────────────┐  ┌───────────────┐                           │
+│  │   MockUSDT    │  │ Pyth Oracle   │                           │
+│  │   (Testnet)   │  │ (Price Feeds) │                           │
+│  └───────────────┘  └───────────────┘                           │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    REAL WORLD ASSETS                             │
+│  ┌───────────────────────┐  ┌───────────────────────┐           │
+│  │   FINE ART            │  │   MUSIC ROYALTIES     │           │
+│  │                       │  │                       │           │
+│  │ • Basquiat            │  │ • Afrobeats           │           │
+│  │ • Warhol              │  │ • Hip-Hop Classics    │           │
+│  │ • Kusama              │  │ • Lo-Fi Beats         │           │
+│  │ • Emerging Artists    │  │ • Cinematic Scores    │           │
+│  │                       │  │                       │           │
+│  │ Custody: Geneva       │  │ Rights: Delaware SPV  │           │
+│  │ Freeport              │  │                       │           │
+│  └───────────────────────┘  └───────────────────────┘           │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 🏗️ Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
-- **Next.js 14** - React framework with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
-- **Radix UI** - Accessible component primitives
-- **TanStack Query** - Data fetching and caching
-- **Framer Motion** - Smooth animations
-- **NextAuth.js v5** - Authentication system
+- **Next.js 15** — React framework with App Router
+- **TypeScript** — Type-safe development
+- **Wagmi v2** — React hooks for Ethereum
+- **Reown AppKit** — Wallet connection (WalletConnect v2)
+- **Framer Motion** — Smooth animations
+- **Tailwind CSS** — Utility-first styling
+- **shadcn/ui** — Premium UI components
 
-### Backend
-- **Next.js API Routes** - Serverless API endpoints
-- **PostgreSQL** - Relational database
-- **Drizzle ORM** - Type-safe database queries
-- **Zod** - Runtime validation
-- **bcryptjs** - Password hashing
+### Smart Contracts
+- **Solidity 0.8.20** — Contract development
+- **Foundry** — Testing and deployment
+- **ERC-1155** — Multi-token standard for asset shares
+- **OpenZeppelin** — Battle-tested contract libraries
+
+### Integrations
+- **Pyth Network** — Real-time price oracles
+- **Mantle Sepolia** — L2 testnet deployment
+
+---
+
+## 📦 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm 8+
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/gitEricsson/MantleMuse
+cd mantlemuse/MantleMuse
+```
+
+### 2. Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 3. Environment Setup
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_PROJECT_ID=your_reown_project_id
+PRIVATE_KEY=your_deployer_private_key
+```
+
+> Get a free Project ID from [Reown Cloud](https://cloud.reown.com)
+
+### 4. Run Development Server
+
+```bash
+pnpm dev
+```
+
+Visit `http://localhost:3000` 🎉
+
+---
+
+## 📜 Smart Contract Deployment
+
+### Deploy to Mantle Sepolia
+
+```bash
+cd ../muse-contract
+
+# Install Foundry dependencies
+forge install
+
+# Deploy contracts
+forge script script/Deploy.s.sol --rpc-url https://rpc.sepolia.mantle.xyz --broadcast
+```
+
+### Contract Addresses (Mantle Sepolia)
+
+| Contract | Address |
+|----------|---------|
+| MuseVault | [`0xc5222a75362a06158e29ad8e39c6722d9a5270ba`](https://explorer.sepolia.mantle.xyz/address/0xc5222a75362a06158e29ad8e39c6722d9a5270ba) |
+| MuseMarket | [`0x783a47a71d90396e8382534a95a8f88c75577837`](https://explorer.sepolia.mantle.xyz/address/0x783a47a71d90396e8382534a95a8f88c75577837) |
+| MuseAsset | [`0x300788c256468ebedd9b60c69e05f9e5bbcc1dd5`](https://explorer.sepolia.mantle.xyz/address/0x300788c256468ebedd9b60c69e05f9e5bbcc1dd5) |
+| MockUSDT | [`0xa901cab6bd79045caecc0d3f7dcd18934f7c6ef7`](https://explorer.sepolia.mantle.xyz/address/0xa901cab6bd79045caecc0d3f7dcd18934f7c6ef7) |
+
+---
+
+## 🧪 Testing the App
+
+### Get Testnet Tokens
+
+1. Connect your wallet on the app
+2. Click **"Get 10k USDT"** button (gasless faucet)
+3. USDT will be minted directly to your wallet
+
+### Investment Flow
+
+1. Go to **Explore** → Select an asset
+2. Enter investment amount → Click **Invest Now**
+3. Approve USDT → Confirm transaction
+4. View your holdings in **Portfolio**
+
+### Sell Your Shares
+
+1. Go to **Portfolio**
+2. Click **Sell** on any holding
+3. Enter shares to sell → See instant payout
+4. Confirm transaction
 
 ---
 
 ## 📁 Project Structure
 
 ```
-Mantle-Muse/
+MantleMuse/
 ├── src/
-│   ├── app/                      # Next.js App Router
-│   │   ├── api/                  # API Routes (serverless)
-│   │   │   ├── auth/             # Authentication endpoints
-│   │   │   │   ├── [...nextauth]/  # NextAuth handler
-│   │   │   │   └── register/       # User registration
-│   │   │   ├── admin/            # Admin-only endpoints
-│   │   │   │   └── assets/       # Asset management
-│   │   │   ├── assets/           # Asset endpoints
-│   │   │   ├── portfolio/        # Portfolio endpoint
-│   │   │   ├── invest/           # Investment endpoint
-│   │   │   ├── sell/             # Sell endpoint
-│   │   │   └── seed/             # Database seed
-│   │   ├── auth/                 # Auth pages
-│   │   │   ├── login/            # Login page
-│   │   │   └── register/         # Registration page
-│   │   ├── admin/                # Admin dashboard
-│   │   │   ├── page.tsx          # Dashboard home
-│   │   │   └── assets/new/       # Add asset form
-│   │   ├── explore/              # Marketplace page
-│   │   ├── portfolio/            # Portfolio page
-│   │   ├── assets/[id]/          # Asset detail page
-│   │   ├── how-it-works/         # Info page
-│   │   ├── layout.tsx            # Root layout
-│   │   ├── page.tsx              # Home page
-│   │   ├── providers.tsx         # Client providers
-│   │   ├── not-found.tsx         # 404 page
-│   │   └── globals.css           # Global styles
-│   ├── components/               # React components
-│   │   ├── ui/                   # shadcn/ui components
-│   │   ├── Navbar.tsx            # Navigation
-│   │   └── AssetCard.tsx         # Asset display
-│   ├── hooks/                    # Custom React
- hooks
-│   │   ├── use-assets.ts         # Asset fetching
-│   │   ├── use-portfolio.ts      # Portfolio data
-│   │   ├── use-transactions.ts   # Buy/sell operations
-│   │   └── use-toast.ts          # Toast notifications
-│   ├── context/                  # React context
-│   │   └── WalletContext.tsx     # Wallet state
-│   ├── lib/                      # Utilities
-│   │   ├── auth.ts               # NextAuth config
-│   │   ├── db.ts                 # Database connection
-│   │   ├── storage.ts            # Data access layer
-│   │   ├── seed.ts               # Seed data (20 assets)
-│   │   ├── queryClient.ts        # React Query setup
-│   │   └── utils.ts              # Helper functions
-│   ├── types/                    # TypeScript types
-│   │   └── api.ts                # API type definitions
-│   └── middleware.ts             # Route protection
-├── drizzle/                      # Database schema
-│   └── schema.ts                 # Drizzle ORM schema
-├── public/                       # Static assets
-├── migrations/                   # Database migrations
-├── next.config.js                # Next.js configuration
-├── tailwind.config.ts            # Tailwind configuration
-├── drizzle.config.ts             # Drizzle configuration
-└── tsconfig.json                 # TypeScript configuration
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── explore/            # Asset marketplace
+│   │   ├── assets/[id]/        # Asset detail pages
+│   │   ├── portfolio/          # User holdings
+│   │   ├── kyc/                # KYC verification
+│   │   ├── legal/              # Compliance pages
+│   │   ├── tools/              # AI valuation tools
+│   │   └── admin/              # Admin dashboard
+│   ├── components/             # React components
+│   │   ├── ui/                 # shadcn/ui components
+│   │   ├── AssetCard.tsx       # Asset display cards
+│   │   ├── AIFairValueCard.tsx # AI valuation widget
+│   │   ├── ProposalCard.tsx    # Governance voting
+│   │   └── ...
+│   ├── hooks/                  # Custom React hooks
+│   │   ├── use-invest.ts       # Investment logic
+│   │   ├── use-sell.ts         # Secondary market
+│   │   ├── use-oracle.ts       # Pyth integration
+│   │   └── ...
+│   ├── constants/              # Contract ABIs & addresses
+│   └── lib/                    # Utilities
+└── muse-contract/              # Foundry project
+    ├── contracts/              # Solidity contracts
+    ├── script/                 # Deployment scripts
+    └── test/                   # Contract tests
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🔒 Security & Compliance
 
-### Prerequisites
+### Asset Custody
+- **Fine Art**: Stored in regulated freeport facilities (Geneva, Luxembourg)
+- **Music Rights**: Held in Delaware SPV structures
+- **Insurance**: Lloyd's of London coverage on all physical assets
 
-- **Node.js** 18.0 or higher
-- **PostgreSQL** 14 or higher
-- **npm** or **yarn**
+### On-Chain Security
+- OpenZeppelin contract standards
+- Role-based access control for admin functions
+- Reentrancy guards on all financial operations
 
-### Installation (5 Minutes)
-
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` with your configuration:
-   ```env
-   # Database
-   DATABASE_URL=postgresql://user:password@localhost:5432/mantlemuse
-   
-   # NextAuth
-   NEXTAUTH_SECRET=your-secret-key-here
-   NEXTAUTH_URL=http://localhost:3000
-   
-   # Node Environment
-   NODE_ENV=development
-   ```
-
-   **Generate a secure secret:**
-   ```bash
-   openssl rand -base64 32
-   ```
-
-3. **Initialize the database**
-   ```bash
-   npm run db:push
-   ```
-
-4. **Start development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Seed the database with 20 assets and demo accounts**
-   ```bash
-   # In another terminal or browser
-   curl -X POST http://localhost:3000/api/seed
-   ```
-
-6. **Open the application**
-   - Frontend: http://localhost:3000
-   - Login: http://localhost:3000/auth/login
-   - Admin: http://localhost:3000/admin
+### Regulatory Compliance
+- KYC/AML verification for all investors
+- SEC Reg D compliant offering structure
+- Annual third-party audits planned
 
 ---
 
-## 🔐 Authentication System
+## 🗺️ Roadmap
 
-### Overview
+### Phase 1: Foundation ✅
+- [x] Core marketplace with art & music assets
+- [x] Investment and secondary market functionality
+- [x] KYC verification flow
+- [x] Governance voting for shareholders
 
-The authentication system uses NextAuth.js v5 with:
-- Email/password credentials
-- Role-based access control (User/Admin)
-- JWT sessions
-- Bcrypt password hashing
-- Protected routes via middleware
+### Phase 2: Intelligence ✅
+- [x] AI Fair Value estimation
+- [x] Pyth oracle integration
+- [x] Market pulse indicators
+- [x] Dynamic valuation badges
 
-### Demo Accounts
+### Phase 3: Mantle Native ✅
+- [x] Why Mantle benefits section
+- [x] mETH staking integration (UI ready)
+- [x] Ultra-low gas optimizations
 
-Automatically created when you seed the database:
-
-| Role | Email | Password | Access |
-|------|-------|----------|--------|
-| **Admin** | admin@mantlemuse.com | admin123 | Full admin dashboard |
-| **User** | user@mantlemuse.com | user123 | Standard features |
-
-### User Registration
-
-**Endpoint:** `POST /api/auth/register`
-
-**Request:**
-```json
-{
-  "email": "user@example.com",
-  "password": "securepassword123",
-  "name": "John Doe"
-}
-```
-
-**Features:**
-- Email validation
-- Password minimum 6 characters
-- Bcrypt hashing (10 rounds)
-- Duplicate email check
-- Auto-assigned "user" role
-
-### User Login
-
-**Pages:**
-- Login: `/auth/login`
-- Register: `/auth/register`
-
-**Using Sessions:**
-
-```typescript
-// Client-side
-import { useSession } from "next-auth/react";
-
-function MyComponent() {
-  const { data: session, status } = useSession();
-  
-  if (status === "loading") return <div>Loading...</div>;
-  if (!session) return <div>Not logged in</div>;
-  
-  return <div>Welcome {session.user.name}!</div>;
-}
-
-// Server-side
-import { auth } from "@/lib/auth";
-
-export default async function ServerComponent() {
-  const session = await auth();
-  
-  if (!session) {
-    return <div>Not authenticated</div>;
-  }
-  
-  return <div>Hello {session.user.name}</div>;
-}
-```
-
-### Protected Routes
-
-**Public Routes:**
-- `/` - Home page
-- `/explore` - Marketplace
-- `/how-it-works` - Information
-- `/auth/login` - Login page
-- `/auth/register` - Registration page
-
-**Authenticated Routes:**
-- `/portfolio` - User portfolio
-
-**Admin-Only Routes:**
-- `/admin/*` - All admin pages
-- Automatically protected by middleware
-- Redirects to login if not authenticated
-- Redirects to home if not admin role
+### Phase 4: Expansion 🔜
+- [ ] Mobile-responsive PWA
+- [ ] Multi-chain expansion (Base, Arbitrum)
+- [ ] Institutional API access
+- [ ] Real music catalog partnerships
 
 ---
 
-## 👑 Admin Dashboard
+## 👥 Team
 
-### Accessing the Dashboard
-
-1. Login with admin credentials
-2. Click "Admin Dashboard" in user menu
-3. Or navigate to `/admin`
-
-### Features
-
-#### 1. Overview Dashboard (`/admin`)
-- **Statistics Cards:**
-  - Total assets listed
-  - Registered users
-  - Active investments
-  - Total platform volume
-- **Quick Actions:**
-  - Add new asset
-  - Manage assets
-  - Update valuations
-  - Distribute payouts
-- **Navigation:**
-  - Asset Management section
-  - Operations section
-
-#### 2. Add New Asset (`/admin/assets/new`)
-
-Complete form with all fields:
-
-**Basic Information:**
-- Asset name
-- Type (Art/Music)
-- Image URL
-- Description
-- Story/provenance
-
-**Financial Details:**
-- Total asset value
-- Price per share
-- Available shares
-- Minimum investment
-- Target return (e.g., "10-15%")
-- Payout frequency (monthly/quarterly/annually/exit-based)
-
-**Classification:**
-- Return type (Growth/Income)
-- Risk level (Low/Medium/High)
-
-**Music-Specific:**
-- Royalty sources (conditional, for music assets)
-
-**Display Settings:**
-- Featured on homepage toggle
-
-**API Endpoint:** `POST /api/admin/assets`
-
-#### 3. Future Admin Features (Placeholders Ready)
-
-- **Manage Assets** (`/admin/assets`) - Edit/update existing assets
-- **Update Valuations** (`/admin/valuations`) - Adjust prices with demo slider
-- **Distribute Payouts** (`/admin/payouts`) - Process investor payouts
-- **User Management** (`/admin/users`) - View and manage users
-
-### Creating Admin Users
-
-**Method 1: Via Database (Recommended)**
-```sql
-UPDATE users SET role = 'admin' WHERE email = 'user@example.com';
-```
-
-**Method 2: Programmatic**
-```typescript
-import { storage } from "@/lib/storage";
-import bcrypt from "bcryptjs";
-
-const password = await bcrypt.hash("adminpass", 10);
-await storage.createUserWithPassword(
-  "admin@company.com",
-  password,
-  "Admin Name",
-  "admin"
-);
-```
+Built with ❤️ for the **Mantle Hackathon**
 
 ---
 
-## 🔌 API Reference
+## 📄 License
 
-### Public Endpoints
-
-```typescript
-// List assets with optional filters
-GET /api/assets?type=art&returnType=growth&riskLevel=low
-Response: Array<Asset>
-
-// Get single asset
-GET /api/assets/[id]
-Response: Asset
-
-// Get user portfolio
-GET /api/portfolio?walletAddress=0x...
-Response: {
-  totalInvested: string,
-  currentValue: string,
-  totalEarned: string,
-  investments: Array<Investment & { asset: Asset }>
-}
-
-// Make investment
-POST /api/invest
-Body: { assetId: number, amount: number, walletAddress: string }
-Response: { success: boolean, shares: number, investment: Investment }
-
-// Sell shares
-POST /api/sell
-Body: { assetId: number, shares: number, walletAddress: string }
-Response: { success: boolean, proceeds: string }
-
-// Seed database
-POST /api/seed
-Response: { success: boolean, message: string }
-```
-
-### Authentication Endpoints
-
-```typescript
-// Register new user
-POST /api/auth/register
-Body: { email: string, password: string, name: string }
-Response: { success: boolean, user: User }
-
-// Login (handled by NextAuth)
-POST /api/auth/[...nextauth]
-Body: { email: string, password: string }
-Response: Sets session cookie
-
-// Logout
-POST /api/auth/signout
-Response: Clears session
-```
-
-### Admin Endpoints
-
-```typescript
-// Create asset (admin only)
-POST /api/admin/assets
-Headers: { Cookie: session }
-Body: { name, type, imageUrl, description, ... }
-Response: Asset
-
-// List all assets (admin view)
-GET /api/admin/assets
-Headers: { Cookie: session }
-Response: Array<Asset>
-
-// Update asset (admin only)
-PATCH /api/admin/assets
-Headers: { Cookie: session }
-Body: { id: number, ...updates }
-Response: Asset
-```
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-## 💻 Development
-
-### Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server on port 3000 |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run check` | Type check with TypeScript |
-| `npm run db:push` | Push database schema changes |
-
-### Common Tasks
-
-#### Add a New Page
-```bash
-mkdir src/app/my-page
-# Create src/app/my-page/page.tsx
-```
-
-```tsx
-// src/app/my-page/page.tsx
-export default function MyPage() {
-  return <div>My Page</div>;
-}
-```
-
-#### Add a New API Route
-```bash
-mkdir src/app/api/my-endpoint
-# Create src/app/api/my-endpoint/route.ts
-```
-
-```typescript
-// src/app/api/my-endpoint/route.ts
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello World" });
-}
-```
-
-#### Add a Component
-```tsx
-// src/components/MyComponent.tsx
-"use client";
-
-export function MyComponent() {
-  return <div>My Component</div>;
-}
-```
-
-#### Install UI Component
-```bash
-npx shadcn-ui@latest add button
-npx shadcn-ui@latest add dialog
-npx shadcn-ui@latest add card
-```
-
-### Database Management
-
-```bash
-# Push schema changes
-npm run db:push
-
-# Generate migration files
-npx drizzle-kit generate
-
-# View database studio
-npx drizzle-kit studio
-```
-
-### Import Paths
-
-```typescript
-// Components
-import { Button } from "@/components/ui/button";
-import { Navbar } from "@/components/Navbar";
-
-// Hooks
-import { useAssets } from "@/hooks/use-assets";
-
-// Types
-import { API_ROUTES } from "@/types/api";
-
-// Database
-import { storage } from "@/lib/storage";
-import { db } from "@/lib/db";
-
-// Schema
-import { assets } from "@/drizzle/schema";
-```
-
----
-
-## 📊 20 Sample Assets
-
-The database seeds with 20 professionally curated assets:
-
-### Art (10 assets)
-1. **Basquiat: Warrior (1982)** - $12M, Growth, Medium Risk
-2. **Warhol: Marilyn Monroe (Pink)** - $4.5M, Growth, Low Risk
-3. **Picasso: Blue Period Sketch** - $3.2M, Growth, Low Risk
-4. **Banksy: Love is in the Air** - $2.8M, Growth, Medium Risk
-5. **Yayoi Kusama: Pumpkin Series** - $1.8M, Growth, Medium Risk
-6. **Rothko: Orange and Yellow** - $8.5M, Growth, Low Risk
-7. **Hockney: A Bigger Splash** - $5.5M, Growth, Low Risk
-8. **Koons: Balloon Dog (Orange)** - $6.2M, Growth, Medium Risk
-9. **Richter: Abstract Painting 829-3** - $7.8M, Growth, Low Risk
-10. **Pollock: Number 17A** - $15M, Growth, Medium Risk
-
-### Music (10 assets)
-1. **Summer Haze Catalog** - $850K, Income, Low Risk, Quarterly
-2. **Future Bass Anthology** - $320K, Income, Medium Risk, Monthly
-3. **Classic Rock Anthems Vol. 1** - $1.2M, Income, Low Risk, Quarterly
-4. **Lo-Fi Hip Hop Beats 2024** - $420K, Income, Low Risk, Monthly
-5. **Reggaeton Global Hits** - $980K, Income, Medium Risk, Quarterly
-6. **Synthwave Sunset Catalog** - $380K, Income, Medium Risk, Monthly
-7. **Neo-Soul Sessions** - $540K, Income, Low Risk, Quarterly
-8. **Techno Underground Berlin** - $450K, Income, Medium Risk, Monthly
-9. **Acoustic Folk Gems** - $390K, Income, Low Risk, Quarterly
-10. **Epic Cinematic Scores** - $720K, Income, Low Risk, Quarterly
-
-Each asset includes:
-- Detailed description
-- High-quality image URL
-- Complete financial metrics
-- Risk classification
-- Compelling backstory
-- Proper categorization
-
----
-
-## 🚢 Deployment
-
-### Vercel (Recommended)
-
-1. **Push to GitHub**
-   ```bash
-   git push origin main
-   ```
-
-2. **Import to Vercel**
-   - Visit vercel.com
-   - Import repository
-   - Auto-detected as Next.js
-
-3. **Add Environment Variables**
-   ```env
-   DATABASE_URL=your_production_database_url
-   NEXTAUTH_SECRET=your_production_secret
-   NEXTAUTH_URL=https://yourdomain.com
-   ```
-
-4. **Deploy**
-   - Vercel deploys automatically
-   - Zero configuration needed
-
-### Manual Deployment
-
-```bash
-# Build the application
-npm run build
-
-# Start production server
-npm run start
-```
-
-**Requirements:**
-- PostgreSQL database accessible
-- All environment variables set
-- Node.js 18+ installed
-- Run `npm run db:push` before first deployment
-
----
-
-## 🐛 Troubleshooting
-
-### Port Already in Use
-```bash
-npx kill-port 3000
-```
-
-### Database Connection Error
-1. Ensure PostgreSQL is running
-2. Verify `DATABASE_URL` in `.env`
-3. Check database exists: `createdb mantlemuse`
-4. Run `npm run db:push`
-
-### "NEXTAUTH_SECRET not set"
-```bash
-# Generate secret
-openssl rand -base64 32
-
-# Add to .env
-NEXTAUTH_SECRET=generated-secret-here
-```
-
-### "Cannot access admin page"
-1. Verify logged in as admin
-2. Check role: `SELECT role FROM users WHERE email='admin@mantlemuse.com'`
-3. Clear browser cache and cookies
-4. Restart dev server
-
-### "Session not persisting"
-1. Check `NEXTAUTH_URL` matches your domain
-2. Verify cookies are enabled in browser
-3. Ensure `NEXTAUTH_SECRET` is set
-4. Try incognito/private window
-
-### TypeScript Errors
-```bash
-# Type check
-npm run check
-
-# Clear cache
-rm -rf .next
-npm run dev
-```
-
-### Module Not Found
-```bash
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-```
-
----
-
-## 🎯 Key Architectural Decisions
-
-### Why Next.js 14 App Router?
-- **Server-side rendering** for better SEO
-- **Serverless API routes** for scalability
-- **File-based routing** for simplicity
-- **React Server Components** for performance
-- **Industry standard** for modern React apps
-
-### Why NextAuth.js?
-- **Battle-tested** authentication
-- **Easy to extend** with OAuth providers
-- **Secure by default** (CSRF, XSS protection)
-- **Type-safe** with TypeScript
-- **Well-documented** and maintained
-
-### Why Drizzle ORM?
-- **Type-safe** queries
-- **Better performance** than traditional ORMs
-- **Simple migration** system
-- **Great DX** with autocomplete
-- **Lightweight** and fast
-
-### Why PostgreSQL?
-- **ACID compliance** for financial transactions
-- **Robust** and reliable
-- **Excellent** for relational data
-- **Wide adoption** and support
-- **Free and open-source**
-
----
-
-## 🔒 Security Features
-
-- ✅ **Password hashing** with bcrypt (10 rounds)
-- ✅ **JWT sessions** (stateless, secure)
-- ✅ **Role-based access control** (RBAC)
-- ✅ **Route protection** via middleware
-- ✅ **API route protection** with session checks
-- ✅ **SQL injection prevention** (Drizzle ORM)
-- ✅ **XSS prevention** (React + Next.js)
-- ✅ **CSRF protection** (NextAuth built-in)
-- ✅ **Secure cookies** (httpOnly, sameSite)
-
-### Production Security Checklist
-
-- [ ] Use strong `NEXTAUTH_SECRET` (32+ characters)
-- [ ] Enable HTTPS (`NEXTAUTH_URL=https://...`)
-- [ ] Implement rate limiting on auth endpoints
-- [ ] Add email verification
-- [ ] Implement password reset flow
-- [ ] Add 2FA for admin accounts
-- [ ] Monitor failed login attempts
-- [ ] Regular security audits
-- [ ] Keep dependencies updated
-
----
-
-## 📚 Additional Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [NextAuth.js Documentation](https://next-auth.js.org/)
-- [React Query Documentation](https://tanstack.com/query/latest)
-- [Drizzle ORM Documentation](https://orm.drizzle.team/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com/)
-
----
-
-## 🎬 Demo Flow for Presentations
-
-### Quick Demo (2 minutes)
-1. Open http://localhost:3000/auth/login
-2. Login with `admin@mantlemuse.com` / `admin123`
-3. Click "Admin Dashboard" in user menu
-4. Show overview stats
-5. Click "Add New Asset"
-6. Fill basic info (30 seconds)
-7. Submit and navigate to `/explore`
-8. Show new asset in marketplace
-
-### Full Demo (5 minutes)
-1. Show homepage (not logged in)
-2. Click "Sign In" → login page
-3. Enter admin credentials
-4. Show admin badge in navbar
-5. Access admin dashboard
-6. Explain stat cards
-7. Show quick actions section
-8. Click "Add New Asset"
-9. Walk through complete form
-10. Submit and show success
-11. Navigate to marketplace
-12. Show new asset with filters
-13. Click asset → detail page
-14. Demonstrate investment flow
-15. Sign out
-
----
-
-## 🎯 Roadmap
-
-### Phase 1: Core Features (Complete ✅)
-- [x] Project restructure to Next.js 14
-- [x] Authentication system
-- [x] Admin dashboard
-- [x] Asset management
-- [x] 20 sample assets
-- [x] Portfolio tracking
-- [x] Buy/sell functionality
-
-### Phase 2: Enhanced Admin (In Progress)
-- [ ] Manage existing assets page
-- [ ] Update valuations with slider
-- [ ] Distribute payouts interface
-- [ ] User management dashboard
-- [ ] Analytics and reporting
-
-### Phase 3: Advanced Features
-- [ ] Web3 wallet integration (MetaMask, WalletConnect)
-- [ ] Smart contract deployment on Mantle Network
-- [ ] Secondary marketplace for trading shares
-- [ ] Email notifications
-- [ ] Multi-currency support
-- [ ] Social features
-
-### Phase 4: Production Ready
-- [ ] Email verification
-- [ ] Password reset flow
-- [ ] 2FA for admins
-- [ ] Rate limiting
-- [ ] Advanced analytics
-- [ ] Mobile app (React Native)
-
----
-
-## 📝 License
-
-MIT License - see LICENSE file for details
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/my-feature`
-3. Commit changes: `git commit -m "Add my feature"`
-4. Push to branch: `git push origin feature/my-feature`
-5. Open a Pull Request
-
----
-
-## 💡 Tips & Best Practices
-
-### For Development
-- Use TypeScript strict mode
-- Keep components small and focused
-- Use custom hooks for reusable logic
-- Follow the existing code style
-- Test on both desktop and mobile
-- Check console for warnings
-
-### For Production
-- Use environment variables for secrets
-- Enable all security features
-- Set up monitoring and logging
-- Configure proper error boundaries
-- Implement rate limiting
-- Regular backups of database
-
-### For Demos
-- Seed database before presenting
-- Test login flow beforehand
-- Have sample asset data ready
-- Check internet connection (for images)
-- Clear browser cache if needed
-- Practice the flow once
-
----
-
-## 📞 Support
-
-For questions or issues:
-- Check this documentation first
-- Review the troubleshooting section
-- Search existing GitHub issues
-- Open a new issue with details
-
----
-
-## ✅ Project Status
-
-**Version:** 2.0 - Restructured January 2025  
-**Status:** ✅ Production Ready  
-**Architecture:** Next.js 14 App Router + PostgreSQL  
-**Authentication:** ✅ Fully Functional  
-**Admin Dashboard:** ✅ Operational  
-**Sample Assets:** 20 included  
-**Deployment:** Vercel-ready  
-
----
-
-Built with ❤️ for the future of cultural asset investment
+<p align="center">
+  <strong>MantleMuse</strong> — Democratizing access to the world's most valuable alternative assets.
+</p>
+
+<p align="center">
+  <a href="#-live-demo">🌐 Try the Demo</a> •
+  <a href="https://mantle.xyz">💜 Powered by Mantle</a>
+</p>

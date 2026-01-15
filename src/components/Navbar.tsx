@@ -2,39 +2,27 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession, signOut } from 'next-auth/react';
 import { useWallet } from '@/context/WalletContext';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Menu,
   Wallet,
   LayoutDashboard,
   Compass,
   Info,
-  User,
-  LogOut,
   Shield,
+  Sparkles,
+  // LogOut - Removed
 } from 'lucide-react';
 import clsx from 'clsx';
+import { FaucetButton } from './FaucetButton';
+import { KYCBadge } from './KYCBadge';
 
 export function Navbar() {
-  const { data: session } = useSession();
-  const { isConnected, walletAddress, connectWallet, disconnectWallet } =
-    useWallet();
+  // Auth removed for demo
+  const { isConnected, walletAddress, connectWallet, disconnectWallet } = useWallet();
   const pathname = usePathname();
-
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' });
-  };
 
   const NavLinks = () => (
     <>
@@ -57,15 +45,26 @@ export function Navbar() {
         Portfolio
       </Link>
       <Link
-        href="/how-it-works"
+        href="/tools"
         className={clsx(
-          'text-sm font-medium transition-colors hover:text-primary',
-          pathname === '/how-it-works'
+          'text-sm font-medium transition-colors hover:text-primary flex items-center',
+          pathname === '/tools' ? 'text-primary' : 'text-muted-foreground'
+        )}
+      >
+        <Sparkles className="w-4 h-4 mr-1" />
+        AI Tools
+      </Link>
+      <Link
+        href="/admin"
+        className={clsx(
+          'text-sm font-medium transition-colors hover:text-primary flex items-center',
+          pathname.startsWith('/admin')
             ? 'text-primary'
             : 'text-muted-foreground'
         )}
       >
-        How it Works
+        <Shield className="w-4 h-4 mr-1" />
+        Admin
       </Link>
     </>
   );
@@ -92,6 +91,9 @@ export function Navbar() {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-3">
+          <FaucetButton />
+          <KYCBadge />
+
           {isConnected ? (
             <Button
               variant="outline"
@@ -111,65 +113,6 @@ export function Navbar() {
             >
               Connect Wallet
             </Button>
-          )}
-
-          {session ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="border-white/20 bg-transparent hover:bg-white/5"
-                >
-                  <User className="mr-2 h-4 w-4" />
-                  {session.user.name || 'Account'}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-56 bg-card border-white/10"
-              >
-                <DropdownMenuLabel>
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{session.user.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {session.user.email}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-white/10" />
-                {session.user.role === 'admin' && (
-                  <>
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin" className="cursor-pointer">
-                        <Shield className="mr-2 h-4 w-4" />
-                        Admin Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-white/10" />
-                  </>
-                )}
-                <DropdownMenuItem asChild>
-                  <Link href="/portfolio" className="cursor-pointer">
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    My Portfolio
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-white/10" />
-                <DropdownMenuItem
-                  onClick={handleSignOut}
-                  className="cursor-pointer text-red-400"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Link href="/auth/login">
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                Sign In
-              </Button>
-            </Link>
           )}
         </div>
 
@@ -200,6 +143,12 @@ export function Navbar() {
                 <span>My Portfolio</span>
               </Link>
               <Link
+                href="/admin"
+                className="flex items-center space-x-3 text-lg font-medium text-foreground hover:text-primary"
+              >
+                <Shield className="h-5 w-5" /> <span>Admin Dashboard</span>
+              </Link>
+              <Link
                 href="/how-it-works"
                 className="flex items-center space-x-3 text-lg font-medium text-foreground hover:text-primary"
               >
@@ -207,44 +156,6 @@ export function Navbar() {
               </Link>
 
               <div className="pt-8 border-t border-white/10 space-y-3">
-                {session ? (
-                  <>
-                    <div className="px-3 py-2 bg-white/5 rounded-lg">
-                      <p className="text-sm font-medium">{session.user.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {session.user.email}
-                      </p>
-                    </div>
-                    {session.user.role === 'admin' && (
-                      <Link href="/admin">
-                        <Button className="w-full" variant="outline">
-                          <Shield className="mr-2 h-4 w-4" />
-                          Admin Dashboard
-                        </Button>
-                      </Link>
-                    )}
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      onClick={handleSignOut}
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/auth/login">
-                      <Button className="w-full bg-primary">Sign In</Button>
-                    </Link>
-                    <Link href="/auth/register">
-                      <Button className="w-full" variant="outline">
-                        Create Account
-                      </Button>
-                    </Link>
-                  </>
-                )}
-
                 <div className="border-t border-white/10 pt-3">
                   {isConnected ? (
                     <Button

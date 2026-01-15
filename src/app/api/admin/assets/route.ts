@@ -25,13 +25,13 @@ const createAssetSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await auth();
-    if (!session || session.user.role !== "admin") {
-      return NextResponse.json(
-        { message: "Unauthorized - Admin access required" },
-        { status: 401 },
-      );
-    }
+    // const session = await auth();
+    // if (!session || session.user.role !== "admin") {
+    //   return NextResponse.json(
+    //     { message: "Unauthorized - Admin access required" },
+    //     { status: 401 },
+    //   );
+    // }
 
     const body = await request.json();
     const validatedData = createAssetSchema.parse(body);
@@ -62,14 +62,14 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await auth();
-    if (!session || session.user.role !== "admin") {
-      return NextResponse.json(
-        { message: "Unauthorized - Admin access required" },
-        { status: 401 },
-      );
-    }
+    // Check authentication removed for demo
+    // const session = await auth();
+    // if (!session || session.user.role !== "admin") {
+    //   return NextResponse.json(
+    //     { message: "Unauthorized - Admin access required" },
+    //     { status: 401 },
+    //   );
+    // }
 
     // Get all assets for admin view
     const assets = await storage.getAssets();
@@ -86,14 +86,14 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await auth();
-    if (!session || session.user.role !== "admin") {
-      return NextResponse.json(
-        { message: "Unauthorized - Admin access required" },
-        { status: 401 },
-      );
-    }
+    // Check authentication removed for demo
+    // const session = await auth();
+    // if (!session || session.user.role !== "admin") {
+    //   return NextResponse.json(
+    //     { message: "Unauthorized - Admin access required" },
+    //     { status: 401 },
+    //   );
+    // }
 
     const body = await request.json();
     const { id, ...updates } = body;

@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  /*
   if (pathname.startsWith("/admin")) {
     const sessionToken =
       request.cookies.get("authjs.session-token")?.value ||
@@ -15,6 +16,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
+  */
 
   return NextResponse.next();
 }

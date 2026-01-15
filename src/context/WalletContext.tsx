@@ -1,4 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+"use client";
+
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useAppKit } from '@reown/appkit/react';
+import { useAccount, useDisconnect } from 'wagmi';
 
 interface WalletContextType {
   isConnected: boolean;
@@ -10,36 +14,27 @@ interface WalletContextType {
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export function WalletProvider({ children }: { children: ReactNode }) {
-  const [isConnected, setIsConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const { open } = useAppKit();
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
-  // Load from local storage on mount to persist simulated session
-  useEffect(() => {
-    const saved = localStorage.getItem('mantle_wallet');
-    if (saved) {
-      setWalletAddress(saved);
-      setIsConnected(true);
-    }
-  }, []);
-
-  const connectWallet = () => {
-    // Simulate connection delay
-    setTimeout(() => {
-      const mockAddress = "0x71C...9A23";
-      setWalletAddress(mockAddress);
-      setIsConnected(true);
-      localStorage.setItem('mantle_wallet', mockAddress);
-    }, 800);
+  const connectWallet = async () => {
+    await open();
   };
 
   const disconnectWallet = () => {
-    setWalletAddress(null);
-    setIsConnected(false);
-    localStorage.removeItem('mantle_wallet');
+    disconnect();
   };
 
   return (
-    <WalletContext.Provider value={{ isConnected, walletAddress, connectWallet, disconnectWallet }}>
+    <WalletContext.Provider
+      value={{
+        isConnected,
+        walletAddress: address || null,
+        connectWallet,
+        disconnectWallet
+      }}
+    >
       {children}
     </WalletContext.Provider>
   );
@@ -52,3 +47,4 @@ export function useWallet() {
   }
   return context;
 }
+

@@ -1,0 +1,72 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host source.unsplash.com:443 was resolved.
+* IPv6: (none)
+* IPv4: 35.71.131.46
+*   Trying 35.71.131.46:443...
+* Connected to source.unsplash.com (35.71.131.46) port 443
+* ALPN: curl offers h2,http/1.1
+* (304) (OUT), TLS handshake, Client hello (1):
+} [324 bytes data]
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* (304) (IN), TLS handshake, Server hello (2):
+{ [122 bytes data]
+* (304) (IN), TLS handshake, Unknown (8):
+{ [15 bytes data]
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* (304) (IN), TLS handshake, Certificate (11):
+{ [2594 bytes data]
+* (304) (IN), TLS handshake, CERT verify (15):
+{ [264 bytes data]
+* (304) (IN), TLS handshake, Finished (20):
+{ [36 bytes data]
+* (304) (OUT), TLS handshake, Finished (20):
+} [36 bytes data]
+* SSL connection using TLSv1.3 / AEAD-CHACHA20-POLY1305-SHA256 / [blank] / UNDEF
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: CN=source.unsplash.com
+*  start date: Nov 22 01:25:45 2025 GMT
+*  expire date: Feb 20 01:25:44 2026 GMT
+*  subjectAltName: host "source.unsplash.com" matched cert's "source.unsplash.com"
+*  issuer: C=US; O=Let's Encrypt; CN=R13
+*  SSL certificate verify ok.
+* using HTTP/2
+* [HTTP/2] [1] OPENED stream for https://source.unsplash.com/featured/?pop-art
+* [HTTP/2] [1] [:method: HEAD]
+* [HTTP/2] [1] [:scheme: https]
+* [HTTP/2] [1] [:authority: source.unsplash.com]
+* [HTTP/2] [1] [:path: /featured/?pop-art]
+* [HTTP/2] [1] [user-agent: curl/8.7.1]
+* [HTTP/2] [1] [accept: */*]
+> HEAD /featured/?pop-art HTTP/2
+> Host: source.unsplash.com
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/2 503 
+< cache-control: no-cache, no-store
+< content-type: text/html; charset=utf-8
+< nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+< report-to: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=V%2FkfzCu%2BB6XEas9%2Bd4xZYR2KyCHHhGThFTgMjQUq3H8%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1768295559"}],"max_age":3600}
+< reporting-endpoints: heroku-nel="https://nel.heroku.com/reports?s=V%2FkfzCu%2BB6XEas9%2Bd4xZYR2KyCHHhGThFTgMjQUq3H8%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1768295559"
+< server: Heroku
+< via: 2.0 heroku-router
+< content-length: 567
+< date: Tue, 13 Jan 2026 09:12:39 GMT
+< 
+{ [0 bytes data]
+  0   567    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Connection #0 to host source.unsplash.com left intact
+HTTP/2 503 
+cache-control: no-cache, no-store
+content-type: text/html; charset=utf-8
+nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+report-to: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=V%2FkfzCu%2BB6XEas9%2Bd4xZYR2KyCHHhGThFTgMjQUq3H8%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1768295559"}],"max_age":3600}
+reporting-endpoints: heroku-nel="https://nel.heroku.com/reports?s=V%2FkfzCu%2BB6XEas9%2Bd4xZYR2KyCHHhGThFTgMjQUq3H8%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1768295559"
+server: Heroku
+via: 2.0 heroku-router
+content-length: 567
+date: Tue, 13 Jan 2026 09:12:39 GMT
+
