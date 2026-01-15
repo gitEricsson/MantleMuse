@@ -10,7 +10,7 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, Music, Palette, ArrowRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Music, Palette, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CurrencyDisplay } from './CurrencyDisplay';
 
@@ -67,6 +67,28 @@ export function AssetCard({ asset }: AssetCardProps) {
                 {asset.type === 'art' ? 'Fine Art' : 'Music Royalties'}
               </Badge>
             </div>
+            {/* Valuation Trend Badge */}
+            {asset.valuationChange && (
+              <div className="absolute top-3 right-3 z-20">
+                <Badge
+                  className={`backdrop-blur-md border text-xs font-mono ${parseFloat(asset.valuationChange) > 0
+                      ? 'bg-green-500/20 border-green-500/30 text-green-400'
+                      : parseFloat(asset.valuationChange) < 0
+                        ? 'bg-red-500/20 border-red-500/30 text-red-400'
+                        : 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400'
+                    }`}
+                >
+                  {parseFloat(asset.valuationChange) > 0 ? (
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                  ) : parseFloat(asset.valuationChange) < 0 ? (
+                    <TrendingDown className="w-3 h-3 mr-1" />
+                  ) : (
+                    <Minus className="w-3 h-3 mr-1" />
+                  )}
+                  {parseFloat(asset.valuationChange) > 0 ? '+' : ''}{asset.valuationChange}%
+                </Badge>
+              </div>
+            )}
             <div className="absolute bottom-3 left-3 right-3 z-20 flex justify-between items-end">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">

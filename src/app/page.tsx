@@ -26,6 +26,10 @@ import {
 } from '@/components/ui/accordion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CurrencyDisplay } from '@/components/CurrencyDisplay';
+import { MarketPulse } from '@/components/MarketPulse';
+import { WhyMantleSection } from '@/components/WhyMantleSection';
+import { ActivityFeed } from '@/components/ActivityFeed';
+import { PartnersSection } from '@/components/PartnersSection';
 
 // --- Components ---
 
@@ -104,6 +108,11 @@ const HeroSection = () => {
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Market Pulse Indicator */}
+          <div className="mt-8 flex justify-center">
+            <MarketPulse />
           </div>
         </motion.div>
       </div>
@@ -235,6 +244,8 @@ const WhyInvestSection = () => {
   );
 };
 
+// Moved to dedicated component: WhyMantleSection
+
 const FAQSection = () => {
   const faqs = [
     {
@@ -351,12 +362,21 @@ export default function Home() {
               ))}
             </div>
           )}
+
+          {/* Activity Feed */}
+          <div className="mt-16">
+            <ActivityFeed />
+          </div>
         </div>
       </section>
 
       <WhyInvestSection />
 
+      <WhyMantleSection />
+
       <FAQSection />
+
+      <PartnersSection />
 
       {/* Final CTA */}
       <section className="py-32 relative overflow-hidden">

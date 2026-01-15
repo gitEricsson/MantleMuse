@@ -4,13 +4,17 @@ import { useAccount } from "wagmi";
 import { useAppKit } from "@reown/appkit/react";
 import { useMyInvestments } from "@/hooks/use-my-investments";
 import { useClaim } from "@/hooks/use-claim";
+import { useSell } from "@/hooks/use-sell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, TrendingUp, DollarSign, PieChart, AlertCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2, TrendingUp, DollarSign, PieChart, AlertCircle, ArrowDownRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { INITIAL_ASSETS } from "@/lib/storage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CurrencyDisplay } from "@/components/CurrencyDisplay";
@@ -20,12 +24,41 @@ export default function PortfolioPage() {
   const { open } = useAppKit();
   const { investments, isLoading, refetch } = useMyInvestments();
   const { claim, isPending: isClaimPending, isConfirming: isClaimConfirming } = useClaim();
+  const { sellToProtocol, approveMarket, isApproved, isPending: isSellPending, isConfirming: isSellConfirming, isConfirmed: isSellConfirmed, refetchApproval } = useSell();
   const [claimId, setClaimId] = useState<number | null>(null);
+  const [sellModalOpen, setSellModalOpen] = useState(false);
+  const [sellItem, setSellItem] = useState<any>(null);
+  const [sellAmount, setSellAmount] = useState("");
 
   const handleClaim = (assetId: number) => {
     setClaimId(assetId);
     claim(assetId);
   };
+
+  const handleOpenSellModal = (item: any) => {
+    setSellItem(item);
+    setSellAmount("");
+    setSellModalOpen(true);
+  };
+
+  const handleSell = () => {
+    if (!sellItem || !sellAmount) return;
+    if (!isApproved) {
+      approveMarket();
+    } else {
+      sellToProtocol(sellItem.assetId, parseInt(sellAmount));
+    }
+  };
+
+  useEffect(() => {
+    if (isSellConfirmed) {
+      refetchApproval();
+      if (isApproved) {
+        setSellModalOpen(false);
+        refetch();
+      }
+    }
+  }, [isSellConfirmed]);
 
   if (!isConnected) {
     return (
@@ -210,6 +243,15 @@ export default function PortfolioPage() {
                             {(isClaimPending || isClaimConfirming) && claimId === item.assetId ? "Claiming..." : "Claim"}
                           </Button>
                         )}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                          onClick={() => handleOpenSellModal(item)}
+                        >
+                          <ArrowDownRight className="w-3 h-3 mr-1" />
+                          Sell
+                        </Button>
                         <Link href={`/assets/${item.assetId}`}>
                           <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/5">
                             View
@@ -224,6 +266,93 @@ export default function PortfolioPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Sell Modal */}
+      <Dialog open={sellModalOpen} onOpenChange={setSellModalOpen}>
+        <DialogContent className="bg-card border-white/10 max-w-md">
+          <DialogHeader>
+            <DialogTitle>Sell Shares</DialogTitle>
+            <DialogDescription>
+              {isApproved
+                ? "Enter the number of shares you want to sell."
+                : "First, approve the marketplace to transfer your shares."
+              }
+            </DialogDescription>
+          </DialogHeader>
+
+          {sellItem && (
+            <div className="space-y-6">
+              <div className="bg-background/50 border border-white/10 rounded-lg p-4">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="relative w-10 h-10 rounded overflow-hidden bg-muted">
+                    <Image
+                      src={sellItem.asset?.imageUrl || ""}
+                      alt={sellItem.asset?.name || "Asset"}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">{sellItem.asset?.name}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{sellItem.asset?.type}</p>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Available Shares</span>
+                  <span className="font-medium">{sellItem.sharesOwned}</span>
+                </div>
+              </div>
+
+              {isApproved && (
+                <div className="space-y-2">
+                  <Label htmlFor="sellAmount">Shares to Sell</Label>
+                  <Input
+                    id="sellAmount"
+                    type="number"
+                    min="1"
+                    max={sellItem.sharesOwned}
+                    value={sellAmount}
+                    onChange={(e) => setSellAmount(e.target.value)}
+                    placeholder="Enter amount"
+                    className="bg-background/50 border-white/10"
+                  />
+                  {sellAmount && parseInt(sellAmount) > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      Estimated payout: <CurrencyDisplay value={(parseInt(sellAmount) * parseFloat(sellItem.asset?.pricePerShare || "0") * 0.95).toFixed(2)} size="sm" showLogo={true} />
+                      <span className="text-yellow-400 ml-1">(5% protocol fee)</span>
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <Button
+                className="w-full bg-red-600 hover:bg-red-700 text-white"
+                size="lg"
+                onClick={handleSell}
+                disabled={isSellPending || isSellConfirming || (isApproved && (!sellAmount || parseInt(sellAmount) < 1))}
+              >
+                {isSellPending || isSellConfirming ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : isApproved ? (
+                  "Confirm Sale"
+                ) : (
+                  "Approve Marketplace"
+                )}
+              </Button>
+
+              {!isApproved && (
+                <p className="text-xs text-muted-foreground text-center">
+                  This one-time approval allows the marketplace to transfer shares when you sell.
+                </p>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

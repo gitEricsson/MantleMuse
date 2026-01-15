@@ -17,6 +17,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, ArrowLeft, Info, TrendingUp, DollarSign, Wallet, CheckCircle2, ExternalLink } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { CurrencyDisplay } from "@/components/CurrencyDisplay";
+import { ProposalCard } from "@/components/ProposalCard";
+import { AIFairValueCard } from "@/components/AIFairValueCard";
 import { parseUnits, formatUnits } from "viem";
 import { toast } from "sonner";
 import { DEPLOYMENTS } from "@/constants/contracts";
@@ -199,6 +201,7 @@ export default function AssetDetailPage() {
                 <TabsTrigger value="overview" className="h-full px-6 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Overview</TabsTrigger>
                 <TabsTrigger value="financials" className="h-full px-6 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Financials</TabsTrigger>
                 <TabsTrigger value="risks" className="h-full px-6 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Risks</TabsTrigger>
+                <TabsTrigger value="howItWorks" className="h-full px-6 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">How It Works</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="mt-6 bg-card border border-white/5 rounded-xl p-8 min-h-[300px]">
@@ -255,6 +258,57 @@ export default function AssetDetailPage() {
                     <span className="text-muted-foreground">Past performance of similar assets does not guarantee future results.</span>
                   </li>
                 </ul>
+              </TabsContent>
+
+              <TabsContent value="howItWorks" className="mt-6 bg-card border border-white/5 rounded-xl p-8">
+                <h3 className="text-xl font-bold mb-4 font-display text-white">How Your Investment Works</h3>
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-primary font-bold text-sm">1</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-1">Custody & Ownership</h4>
+                      <p className="text-muted-foreground text-sm">
+                        {asset.type === 'art'
+                          ? 'This artwork is held in a regulated freeport facility with 24/7 security and comprehensive insurance. Your tokens represent beneficial ownership in the SPV that holds the asset.'
+                          : 'Music rights are held in a Delaware SPV with clear royalty distribution agreements. Your tokens entitle you to proportional streaming and sync licensing revenue.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-secondary font-bold text-sm">2</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-1">Revenue Distribution</h4>
+                      <p className="text-muted-foreground text-sm">
+                        {asset.type === 'art'
+                          ? 'Returns are realized upon resale. When the asset sells, proceeds (minus fees) are distributed pro-rata to all token holders.'
+                          : `Royalties are distributed ${asset.payoutFrequency}. Revenue from streaming platforms and sync deals flows directly to your wallet as USDT.`
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-400 font-bold text-sm">3</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-1">Liquidity & Exit</h4>
+                      <p className="text-muted-foreground text-sm">
+                        You can sell your tokens at any time through our secondary marketplace. The protocol offers buyback at current NAV minus a 5% fee.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-6 pt-6 border-t border-white/5">
+                  <Link href="/legal" className="text-primary text-sm hover:underline flex items-center">
+                    View Full Legal Documentation
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </Link>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
@@ -317,6 +371,21 @@ export default function AssetDetailPage() {
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Governance Section */}
+            <div className="mt-6">
+              <ProposalCard assetId={id} assetName={asset.name} />
+            </div>
+
+            {/* AI Fair Value */}
+            <div className="mt-6">
+              <AIFairValueCard
+                assetName={asset.name}
+                assetType={asset.type}
+                currentValuation={asset.totalValue}
+                description={asset.description}
+              />
             </div>
           </div>
         </div>

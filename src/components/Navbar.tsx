@@ -12,10 +12,12 @@ import {
   Compass,
   Info,
   Shield,
+  Sparkles,
   // LogOut - Removed
 } from 'lucide-react';
 import clsx from 'clsx';
 import { FaucetButton } from './FaucetButton';
+import { KYCBadge } from './KYCBadge';
 
 export function Navbar() {
   // Auth removed for demo
@@ -41,6 +43,16 @@ export function Navbar() {
         )}
       >
         Portfolio
+      </Link>
+      <Link
+        href="/tools"
+        className={clsx(
+          'text-sm font-medium transition-colors hover:text-primary flex items-center',
+          pathname === '/tools' ? 'text-primary' : 'text-muted-foreground'
+        )}
+      >
+        <Sparkles className="w-4 h-4 mr-1" />
+        AI Tools
       </Link>
       <Link
         href="/admin"
@@ -80,6 +92,7 @@ export function Navbar() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-3">
           <FaucetButton />
+          <KYCBadge />
 
           {isConnected ? (
             <Button

@@ -26,6 +26,7 @@ import { ArrowLeft, Loader2, Plus, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAdmin } from "@/hooks/use-admin";
 import { useEffect } from "react";
+import { AIValuationSuggestion } from "@/components/AIValuationSuggestion";
 
 export default function NewAssetPage() {
   const router = useRouter();
@@ -269,6 +270,19 @@ export default function NewAssetPage() {
                     onChange={(e) => handleChange("story", e.target.value)}
                     rows={3}
                     className="bg-background/50 border-white/10"
+                  />
+                </div>
+
+                {/* AI Valuation Suggestion */}
+                <div className="md:col-span-2">
+                  <AIValuationSuggestion
+                    assetType={formData.type}
+                    assetName={formData.name}
+                    description={formData.description}
+                    onSuggestion={(valuation, risk) => {
+                      handleChange("totalValue", valuation.toString());
+                      handleChange("riskLevel", risk);
+                    }}
                   />
                 </div>
               </div>

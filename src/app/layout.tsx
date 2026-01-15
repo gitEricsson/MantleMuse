@@ -41,14 +41,14 @@ export default function RootLayout({
                   © {new Date().getFullYear()} MantleMuse. All rights reserved.
                 </div>
                 <div className="flex justify-center space-x-6">
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <a href="/legal" className="hover:text-primary transition-colors">
+                    Legal
+                  </a>
+                  <a href="/legal" className="hover:text-primary transition-colors">
                     Terms
                   </a>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Privacy
-                  </a>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Support
+                  <a href="/kyc" className="hover:text-primary transition-colors">
+                    Verify
                   </a>
                 </div>
               </div>
